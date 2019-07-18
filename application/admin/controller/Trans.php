@@ -265,14 +265,14 @@ class Trans extends BaseAdmin
 
             $data=input("post.");
 
-            $re=db("trans")->where("fid",6)->find();
+            $re=db("about")->where("id",4)->find();
             
             if(request()->file("image")){
                  $data['image']=uploads("image");
             }else{
                 $data['image']=$re['image'];
             }
-            $res=db("trans")->where("fid",6)->update($data);
+            $res=db("about")->where("id",4)->update($data);
 
             if($res){
                 $this->success("修改成功");
@@ -281,7 +281,7 @@ class Trans extends BaseAdmin
             }
 
         }else{
-            $re=db("trans")->where("fid",6)->find();
+            $re=db("about")->where("id",4)->find();
 
             $this->assign("re",$re);
 
@@ -293,7 +293,7 @@ class Trans extends BaseAdmin
     //列表
     public function lister()
     {
-        $list=db("trans")->where(["fid"=>7])->order(["sort asc","id desc"])->select();
+        $list=db("cases")->order(["sort asc","id desc"])->paginate(20);
 
         $this->assign("list",$list);
 
@@ -305,19 +305,26 @@ class Trans extends BaseAdmin
         $id=\input('id');
         $data=input("post.");
         if($id){
-          
+            $re=db('cases')->where("id=$id")->find();
+            if(request()->file("image")){
+                $data['image']=uploads("image");
+           }else{
+               $data['image']=$re['image'];
+           }
            
-           
-           $res=db('trans')->where("id=$id")->update($data);
+           $res=db('cases')->where("id=$id")->update($data);
            if($res){
                $this->success("修改成功！");
            }else{
                $this->error("修改失败！");
            }
         }else{
-           
+            if(request()->file("image")){
+                $data['image']=uploads("image");
+           }
+           $data['time']=time();
             
-            $re=db('trans')->insert($data);
+            $re=db('cases')->insert($data);
             if($re){
                 $this->success("添加成功！");
             }else{
@@ -328,14 +335,14 @@ class Trans extends BaseAdmin
     }
     public function modifys(){
         $id=input("id");
-        $re=db('trans')->where("id=$id")->find();
+        $re=db('cases')->where("id=$id")->find();
         echo json_encode($re);
     }
     public function delete(){
         $id=input('id');
-        $re=db("trans")->where("id=$id")->find();
+        $re=db("cases")->where("id=$id")->find();
         if($re){
-           $del=db("trans")->where("id=$id")->delete();
+           $del=db("cases")->where("id=$id")->delete();
            if($del){
                echo '1';
            }else{
@@ -349,7 +356,7 @@ class Trans extends BaseAdmin
     public function sorts(){
         $data=input('post.');
         foreach ($data as $id => $sort){
-            db('trans')->where(array('id' => $id ))->setField('sort' , $sort);
+            db('cases')->where(array('id' => $id ))->setField('sort' , $sort);
         }
         $this->redirect('lister');
     }
@@ -359,9 +366,13 @@ class Trans extends BaseAdmin
         if(request()->isAjax()){
 
             $data=input("post.");
-
-           
-            $res=db("trans")->where("fid",8)->update($data);
+            $re=db("about")->where("id",5)->find();
+            if(request()->file("image")){
+                $data['image']=uploads("image");
+           }else{
+               $data['image']=$re['image'];
+           }
+            $res=db("about")->where("id",5)->update($data);
 
             if($res){
                 $this->success("修改成功");
@@ -370,7 +381,7 @@ class Trans extends BaseAdmin
             }
 
         }else{
-            $re=db("trans")->where("fid",8)->find();
+            $re=db("about")->where("id",5)->find();
 
             $this->assign("re",$re);
 
